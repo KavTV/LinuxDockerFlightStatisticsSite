@@ -5,6 +5,9 @@ namespace FlightCrashSite.Services;
 
 public interface IFlightCrashService
 {
+	List<FlightOperatorCrashReport> GetAllFlightOperatorCrashReports();
+	List<FlightCrashReport> GetFlightCrashReportsByOperator(string flightType);
+	FlightOperatorCrashReport GetFlightOperatorReport(string flightOperator);
 	FlightYearlyCrashReport GetFlightYearlyCrashReport(int year);
 	List<FlightYearlyCrashReport> GetFlightYearlyCrashReports(int startYear, int endYear);
 }
@@ -21,17 +24,27 @@ public class FlightCrashService : IFlightCrashService
 
 	public FlightCrashService Initalize()
 	{
-		//using (var reader = new StreamReader(path))
-		//using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-		//{
-		//	flightCrashReports = csv.GetRecords<FlightCrashReport>().ToList();
-		//}
-
 		flightCrashReports = File.ReadAllLines("./flight-data.csv")
 							   .Skip(1)
 							   .Select(v => FlightCrashReport.FromCsv(v))
 							   .ToList();
 		return this;
+	}
+
+	public List<FlightCrashReport> GetFlightCrashReportsByOperator(string flightOperator)
+	{
+		return flightCrashReports.FindAll(f => f.Operator == flightOperator).ToList();
+	}
+
+	public List<FlightOperatorCrashReport> GetAllFlightOperatorCrashReports()
+	{
+		List<string> flightOperators = flightCrashReports.Select(f => f.Operator).Distinct().ToList();
+		List<FlightOperatorCrashReport> flightOperatorCrashReports = new List<FlightOperatorCrashReport>();
+		foreach(string flightOperator in flightOperators)
+		{
+			flightOperatorCrashReports.Add(GetFlightOperatorReport(flightOperator));
+		}
+		return flightOperatorCrashReports;
 	}
 
 	public List<FlightYearlyCrashReport> GetFlightYearlyCrashReports(int startYear, int endYear)
@@ -52,11 +65,25 @@ public class FlightCrashService : IFlightCrashService
 			Crashes = flightYearlyCrashReports.Count,
 			Year = year
 		};
-
 		foreach (FlightCrashReport flightCrashReport in flightYearlyCrashReports)
 		{
 			flightYearlyCrashReport.Deaths += flightCrashReport.Fatalities;
 		}
 		return flightYearlyCrashReport;
+	}
+
+	public FlightOperatorCrashReport GetFlightOperatorReport(string flightOperator)
+	{
+		List<FlightCrashReport> flightCrashReports = this.flightCrashReports.FindAll(f => f.Operator == flightOperator);
+		FlightOperatorCrashReport flightOperatorCrashReport = new()
+		{
+			Crashes = flightCrashReports.Count,
+			Operator = flightOperator
+		};
+		foreach (FlightCrashReport flightCrashReport in flightCrashReports)
+		{
+			flightOperatorCrashReport.Deaths += flightCrashReport.Fatalities;
+		}
+		return flightOperatorCrashReport;
 	}
 }
