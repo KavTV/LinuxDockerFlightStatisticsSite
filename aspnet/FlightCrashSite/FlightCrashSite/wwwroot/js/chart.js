@@ -1,5 +1,6 @@
 ﻿// Initialize the echarts instance based on the prepared dom
-var myChart = echarts.init(document.getElementById('main'));
+var myChart = echarts.init(document.getElementById('yearly'));
+var operatorChart = echarts.init(document.getElementById('operator'));
 
 // Specify the configuration items and data for the chart
 var option = {
@@ -22,7 +23,6 @@ var option = {
 };
 
 
-// Display the chart using the configuration items and data just specified.
 myChart.setOption(option);
 
 function yearlyCrashes(crashes) {
@@ -34,15 +34,15 @@ function yearlyCrashes(crashes) {
         yAxis: 
             [{
                 offset: 0,
-                nameGap: 40,
+                nameGap: 30,
                 nameLocation: "center",
                 position: "right",
                 type: "value",
                 name: "Crashes"
             },
             {
-                offset: 60,
-                nameGap: 40,
+                offset: 40,
+                nameGap: 45,
                 nameLocation: "center",
                 position: "right",
                 type: "value",
@@ -50,19 +50,73 @@ function yearlyCrashes(crashes) {
             }
             ]
         ,
-series: [
-    {
-        name: 'Crashes',
-        type: 'bar',
-        yAxisIndex: 0,
-        data: crashes.map((c) => c.Crashes)
-    },
-    {
-        name: 'Deaths',
-        type: 'line',
-        yAxisIndex: 1,
-        data: crashes.map((c) => c.Deaths)
-    }
-]
-})
+        series: [
+            {
+                name: 'Crashes',
+                type: 'bar',
+                yAxisIndex: 0,
+                data: crashes.map((c) => c.Crashes)
+            },
+            {
+                name: 'Deaths',
+                type: 'line',
+                yAxisIndex: 1,
+                data: crashes.map((c) => c.Deaths)
+            }
+        ]
+        })
+}
+
+function operatorCrashes(crashes) {
+    console.log(crashes);
+    operatorChart.setOption({
+        title: {
+            text: 'Yearly Flight Crashes'
+        },
+        tooltip: {},
+        legend: {
+            data: ['Crashes', 'Deaths']
+        },
+        xAxis: {
+            data: crashes.map((c) => c.Operator)
+        },
+        dataZoom: [
+            {
+                show: true,
+            },
+        ],
+        yAxis:
+            [{
+                offset: 0,
+                nameGap: 30,
+                nameLocation: "center",
+                position: "right",
+                type: "value",
+                name: "Crashes"
+            },
+                {
+                    offset: 40,
+                    nameGap: 45,
+                    nameLocation: "center",
+                    position: "right",
+                    type: "value",
+                    name: "Deaths"
+                }
+            ]
+        ,
+        series: [
+            {
+                name: 'Crashes',
+                type: 'bar',
+                yAxisIndex: 0,
+                data: crashes.map((c) => c.Crashes)
+            },
+            {
+                name: 'Deaths',
+                type: 'line',
+                yAxisIndex: 1,
+                data: crashes.map((c) => c.Deaths)
+            }
+        ]
+    })
 }

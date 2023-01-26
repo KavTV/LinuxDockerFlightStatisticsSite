@@ -4,13 +4,15 @@
 @inject IFlightCrashService flightCrashService
 @{
     ViewData["Title"] = "Home page";
-    List<Models.FlightYearlyCrashReport> yearlyCrashes = flightCrashService.GetFlightYearlyCrashReports(1950, 2000);
-    int p1 = 2;
+    List<Models.FlightYearlyCrashReport> yearlyCrashes = flightCrashService.GetFlightYearlyCrashReports(1950, 2009);
+    List<Models.FlightOperatorCrashReport> operatorCrashes = flightCrashService.GetAllFlightOperatorCrashReports();
 }
 
 
-<div style="display:flex; justify-content:center;">
-    <div id="main" style="width: 600px;height:400px;">
+<div style="display:flex; justify-content:center; flex-direction:column; align-items: center">
+    <div id="yearly" style="width: 1000px;height:400px;">
+    </div>
+    <div id="operator" style="width: 1000px;height:400px;">
     </div>
 
 </div>
@@ -21,4 +23,6 @@
 <script type="text/javascript">
     //CALL JS FUNCTIONS TO ADD DATA TO CHARTS
     yearlyCrashes(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(yearlyCrashes)))
+  
+    operatorCrashes(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(operatorCrashes)))
 </script>
