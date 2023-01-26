@@ -17,7 +17,7 @@ namespace FlightCrashSite.Pages
 
         public void OnGet()
         {
-
+            var a = flightCrashService.GetFlightYearlyCrashReports(1900, 2000);
         }
     }
 }
