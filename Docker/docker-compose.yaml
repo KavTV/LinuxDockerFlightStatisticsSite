@@ -13,7 +13,7 @@ services:
      environment: 
        FTP_USER: "ftp_usr"
        FTP_PASS: "Kode1234!"
-       PASV_ADDRESS: "10.14.0.133"
+       PASV_ADDRESS: ""
      volumes:
        - ./www:/home/vsftpd
      networks:
