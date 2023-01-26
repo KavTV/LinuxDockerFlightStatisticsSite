@@ -4,7 +4,8 @@ namespace FlightCrashSite.Services;
 
 public interface IFlightCrashService
 {
-
+	FlightYearlyCrashReport GetFlightYearlyCrashReport(int year);
+	List<FlightYearlyCrashReport> GetFlightYearlyCrashReports(int startYear, int endYear);
 }
 
 public class FlightCrashService : IFlightCrashService
@@ -26,8 +27,29 @@ public class FlightCrashService : IFlightCrashService
 		return this;
 	}
 
-	public List<FlightCrashReport> GetByLocation(string location)
+	public List<FlightYearlyCrashReport> GetFlightYearlyCrashReports(int startYear, int endYear)
 	{
-		return flightCrashReports.FindAll(f => f.Location == location).ToList();
+		List<FlightYearlyCrashReport> flightYearlyCrashReports = new List<FlightYearlyCrashReport>();
+		for (int year = startYear; year <= endYear; year++)
+		{
+			flightYearlyCrashReports.Add(GetFlightYearlyCrashReport(year));
+		}
+		return flightYearlyCrashReports;
+	}
+
+	public FlightYearlyCrashReport GetFlightYearlyCrashReport(int year)
+	{
+		List<FlightCrashReport> flightYearlyCrashReports = flightCrashReports.FindAll(f => f.Date.Year == year);
+		FlightYearlyCrashReport flightYearlyCrashReport = new()
+		{
+			Crashes = flightYearlyCrashReports.Count,
+			Year = year
+		};
+
+		foreach (FlightCrashReport flightCrashReport in flightYearlyCrashReports)
+		{
+			flightYearlyCrashReport.Deaths += flightCrashReport.Fatalities;
+		}
+		return flightYearlyCrashReport;
 	}
 }
