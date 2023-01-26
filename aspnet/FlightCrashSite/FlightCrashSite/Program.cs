@@ -4,12 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSingleton<IFlightCrashService, FlightCrashService>(f =>
-{
-    FlightCrashService flightCrashService = new FlightCrashService("flight-data.csv");
-    flightCrashService.Initalize();
-    return flightCrashService;
-});
+builder.Services.AddSingleton<IFlightCrashService, FlightCrashService>(
+    f => new FlightCrashService(builder.Configuration.GetValue<string>("FlightDataFile")).Initalize());
 
 var app = builder.Build();
 
