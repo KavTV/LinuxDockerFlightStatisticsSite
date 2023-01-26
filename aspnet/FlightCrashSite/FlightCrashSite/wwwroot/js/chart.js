@@ -8,7 +8,7 @@ var option = {
     },
     tooltip: {},
     legend: {
-        data: ['Crashes']
+        data: ['Crashes', 'Deaths']
     },
     xAxis: {
         data: []
@@ -16,7 +16,7 @@ var option = {
     yAxis: {},
     series: [
         {
-            
+
         }
     ]
 };
@@ -31,17 +31,38 @@ function yearlyCrashes(crashes) {
         xAxis: {
             data: crashes.map((c) => c.Year)
         },
-        series: [
-            {
-                name: 'Crashes',
-                type: 'bar',
-                data: crashes.map((c) => c.Crashes)
+        yAxis: 
+            [{
+                offset: 0,
+                nameGap: 40,
+                nameLocation: "center",
+                position: "right",
+                type: "value",
+                name: "Crashes"
             },
             {
-                name: 'Deaths',
-                type: 'line',
-                data: crashes.map((c) => c.Deaths)
+                offset: 60,
+                nameGap: 40,
+                nameLocation: "center",
+                position: "right",
+                type: "value",
+                name: "Deaths"
             }
-        ]
+            ]
+        ,
+series: [
+    {
+        name: 'Crashes',
+        type: 'bar',
+        yAxisIndex: 0,
+        data: crashes.map((c) => c.Crashes)
+    },
+    {
+        name: 'Deaths',
+        type: 'line',
+        yAxisIndex: 1,
+        data: crashes.map((c) => c.Deaths)
+    }
+]
 })
 }
