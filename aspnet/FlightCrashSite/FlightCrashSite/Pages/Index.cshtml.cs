@@ -13,6 +13,7 @@ namespace FlightCrashSite.Pages
         {
             _logger = logger;
 			this.flightCrashService = flightCrashService;
+
 		}
 
         public void OnGet()

@@ -1,10 +1,21 @@
 ﻿@page
+@using FlightCrashSite.Services
 @model IndexModel
+@inject IFlightCrashService flightCrashService
 @{
     ViewData["Title"] = "Home page";
+    List<Models.FlightYearlyCrashReport> yearlyCrashes = flightCrashService.GetFlightYearlyCrashReports(1950, 2000);
+    int p1 = 2;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div id="main" style="width: 600px;height:400px;">
 </div>
+
+
+<script src="~/js/chart.js" asp-append-version="true"></script>
+
+<script type="text/javascript">
+    //CALL JS FUNCTIONS TO ADD DATA TO CHARTS
+    yearlyCrashes(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(yearlyCrashes)))
+</script>
