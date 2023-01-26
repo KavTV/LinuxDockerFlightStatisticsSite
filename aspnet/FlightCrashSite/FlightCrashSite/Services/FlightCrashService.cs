@@ -1,4 +1,6 @@
-﻿using FlightCrashSite.Models;
+﻿using CsvHelper;
+using FlightCrashSite.Models;
+using System.Globalization;
 
 namespace FlightCrashSite.Services;
 
@@ -20,6 +22,12 @@ public class FlightCrashService : IFlightCrashService
 
 	public FlightCrashService Initalize()
 	{
+		//using (var reader = new StreamReader(path))
+		//using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+		//{
+		//	flightCrashReports = csv.GetRecords<FlightCrashReport>().ToList();
+		//}
+
 		flightCrashReports = File.ReadAllLines("./flight-data.csv")
 							   .Skip(1)
 							   .Select(v => FlightCrashReport.FromCsv(v))
