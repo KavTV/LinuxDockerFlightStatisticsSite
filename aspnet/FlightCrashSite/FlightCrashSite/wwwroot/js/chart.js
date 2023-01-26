@@ -71,7 +71,7 @@ function operatorCrashes(crashes) {
     console.log(crashes);
     operatorChart.setOption({
         title: {
-            text: 'Yearly Flight Crashes'
+            text: 'Operator Crashes'
         },
         tooltip: {},
         legend: {
