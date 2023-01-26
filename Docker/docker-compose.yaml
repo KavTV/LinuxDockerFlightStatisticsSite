@@ -1,0 +1,46 @@
+version: '3'
+services: 
+   ftp_server_test:
+     build:
+       context: .
+       dockerfile: ftp.Dockerfile
+     image: ftp_server_img
+     container_name: ftp_server_test
+     ports:
+       - "20:20"
+       - "21:21"
+       - "47400-47470:47400-47470"
+     environment: 
+       FTP_USER: "ftp_usr"
+       FTP_PASS: "Kode1234!"
+       PASV_ADDRESS: "10.14.0.133"
+     volumes:
+       - ./www:/home/vsftpd
+     networks:
+       - learning
+     healthcheck:
+       test: ["CMD-SHELL", "netstat -lnt | grep :21"]
+       interval: 5s
+       timeout: 15s
+       retries: 15
+       start_period: 20s
+   web:
+     image: asp_net
+     build:
+       context: .
+       dockerfile: web.Dockerfile
+     container_name: aspnet_container
+     ports:
+       - "80:80"
+     environment: 
+       TZ: "Europe/Copenhagen"
+     volumes:
+       - ./www:/var/www
+     networks:
+       - learning
+     depends_on:
+       ftp_server_test:
+          condition: service_healthy
+networks:
+   learning:
+      driver: bridge
